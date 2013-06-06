@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * Implements hook_block_info().
+ *
+ */
+function scrollspy_block_info() {
+  $blocks = array();
+  $blocks['scrollspy'] = array(
+    'info' => t('Scrollspy Module Block'), //Module name
+    'cache' => DRUPAL_CACHE_PER_ROLE,
+  );
+  return $blocks;
+}

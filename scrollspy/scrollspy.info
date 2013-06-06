@@ -1,0 +1,4 @@
+name = scrollspy
+description = This is the skeleton module for Scrollspy.
+version = .01
+core = 7.x
