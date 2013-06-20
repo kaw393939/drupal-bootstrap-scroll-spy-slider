@@ -2,7 +2,6 @@
 
 /**
  * Implements hook_block_info().
- *
  */
 function scrollspy_block_info() {
   $blocks = array();
@@ -13,67 +12,37 @@ function scrollspy_block_info() {
   return $blocks;
 }
 
+
+
 /**
  * Implements hook_menu().
- * 
- * Right now this is configured for 'Menu Block Module'
- * I changed some of the names where it says menu_block to scrollspy
  */
 function scrollspy_menu() {
-  // @todo Remove this check if block module is re-added as a dependency.
-  if (module_exists('block')) {
-    $items['admin/structure/block/add-menu-block'] = array(
-      'title' => 'Add menu block',
-      'description' => 'Add a new menu block.',
-      'page callback' => 'drupal_get_form',
-      'page arguments' => array('menu_block_add_block_form'),
-      'access arguments' => array('administer blocks'),
-      'type' => MENU_LOCAL_ACTION,
-      'file' => 'menu_block.admin.inc',
-    );
-    $default_theme = variable_get('theme_default', 'bartik');
-    foreach (list_themes() as $key => $theme) {
-      if ($key != $default_theme) {
-        $items['admin/structure/block/list/' . $key . '/add-menu-block'] = array(
-          'title' => 'Add scrollspy block',
-          'description' => 'Add a new scrollspy block.',
-          'page callback' => 'drupal_get_form',
-          'page arguments' => array('scrollspy_add_block_form'),
-          'access arguments' => array('administer blocks'),
-          'type' => MENU_LOCAL_ACTION,
-          'file' => 'menu_block.admin.inc',
-        );
-      }
-    }
-    $items['admin/structure/block/delete-menu-block'] = array(
-      'title' => 'Delete scrollspy block',
-      'page callback' => 'drupal_get_form',
-      'page arguments' => array('menu_block_delete'),
-      'access arguments' => array('administer blocks'),
-      'type' => MENU_CALLBACK,
-      'file' => 'menu_block.admin.inc',
-    );
-  }
-
-  $items['admin/config/user-interface/menu-block'] = array(
-    'title' => 'Menu block',
-    'description' => 'Configure menu block.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('menu_block_admin_settings_form'),
-    'access arguments' => array('administer blocks'),
-    'type' => MENU_NORMAL_ITEM,
-    'file' => 'menu_block.admin.inc',
-  );
-  return $items;
+	$items['admin/structure/block/add-scrollspy-block'] = array(
+		'title' => 'Add Scrollspy Block'
+		'description' => 'Attach Scrollspy to a menu',
+		'page callback' => 'scrollspy_page',
+		//right now the page argument is not defined
+        'page arguments' => array('scrollspy_add_block_form'),
+		'access callback' => 'user_access',
+		'access arguments' => array('administer blocks'),	
+	);
 }
 
 
-<?php
 /**
 * Get the result of a view.
 *
+*//Set $name = whatever is selected in a list. 
+*//Get list from Views names and id's
+*
+*
+*
 * @param string $name
 *      The name of the view to retrieve the data from.
+*      scrollspy-test-view
+*      http://drupal.mywebclass.org/mywebclass/?q=scrollspy-test-view
+*
 * @param string $display_id
 *      The display id. On the edit page for the view in question, you'll find
 *      a list of displays at the left side of the control area. "Defaults"
@@ -81,12 +50,13 @@ function scrollspy_menu() {
 *      display you want to use. An URL will appear in the status bar of your
 *      browser. This is usually at the bottom of the window, in the chrome.
 *      Everything after #views-tab- is the display ID, e.g. page_1.
- * @param ...
- *   Any additional parameters will be passed as arguments.
+*
+* @param ...
+*      Any additional parameters will be passed as arguments.
 * @return
 *      array
 *          An array containing an object for each view item.
-*/
+*
 function views_get_view_result($name, $display_id = NULL) {
   $args = func_get_args();
   array_shift($args); // remove $name
@@ -113,4 +83,4 @@ function views_get_view_result($name, $display_id = NULL) {
     return array();
   }
 }
-?>
+*/
