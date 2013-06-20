@@ -27,7 +27,17 @@ function scrollspy_menu() {
 		'access callback' => 'user_access',
 		'access arguments' => array('administer blocks'),	
 	);
+	
+	return $items;
 }
+
+
+
+
+function scrollspy_page() {
+	return 'This is a test';
+}
+
 
 
 /**
