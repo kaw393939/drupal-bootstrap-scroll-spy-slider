@@ -16,26 +16,37 @@ function scrollspy_block_info() {
 
 /**
  * Implements hook_menu().
+ * API: https://api.drupal.org/api/drupal/modules!system!system.api.php/function/hook_menu/7
  */
 function scrollspy_menu() {
-	$items['admin/structure/block/add-scrollspy-block'] = array(
-		'title' => 'Add Scrollspy Block'
-		'description' => 'Attach Scrollspy to a menu',
-		'page callback' => 'scrollspy_page',
-		//right now the page argument is not defined
+	$items['admin/structure/block/add-scrollspy-block'] = array( //admin/structure/block/add-scrollspy-block <-- That's the path we really want
+		'title' => 'Add Scrollspy Block',
+		'description' => 'Attach Scrollspy to a view',
+		'page callback' => 'drupal_get_form', //To make a form -- API: https://api.drupal.org/api/drupal/includes!form.inc/function/drupal_get_form/7
         'page arguments' => array('scrollspy_add_block_form'),
 		'access callback' => 'user_access',
-		'access arguments' => array('administer blocks'),	
+		'access arguments' => array('administer blocks'),
+		'type' => MENU_LOCAL_ACTION,
 	);
 	
 	return $items;
 }
 
 
+/**
+ * Builds form for adding scrollspy blocks
+ * API: https://api.drupal.org/api/drupal/developer%21topics%21forms_api_reference.html/7
+ */
 
+function scrollspy_add_block_form() {
+	$form['scrollspy_blocks'] = array(
+		'#type' => 'checkboxes',
+		'#options' => drupal_map_assoc(array(t('Test 1'), t('Test 2'))),
+		'#title' => t('Select Views to Scrollspy.'),
+		'#description' => t('The Scrollspy effect from Bootstrap will be applied to each selected View.'),
+	);
 
-function scrollspy_page() {
-	return 'This is a test';
+	return $form;
 }
 
 
@@ -43,8 +54,8 @@ function scrollspy_page() {
 /**
 * Get the result of a view.
 *
-*//Set $name = whatever is selected in a list. 
-*//Get list from Views names and id's
+* Set $name = whatever is selected in a list. 
+* Get list from Views names and id's
 *
 *
 *
@@ -67,30 +78,30 @@ function scrollspy_page() {
 *      array
 *          An array containing an object for each view item.
 *
-function views_get_view_result($name, $display_id = NULL) {
-  $args = func_get_args();
-  array_shift($args); // remove $name
-  if (count($args)) {
-    array_shift($args); // remove $display_id
-  }
-
-  $view = views_get_view($name);
-  if (is_object($view)) {
-    if (is_array($args)) {
-      $view->set_arguments($args);
-    }
-    if (is_string($display_id)) {
-      $view->set_display($display_id);
-    }
-    else {
-      $view->init_display();
-    }
-    $view->pre_execute();
-    $view->execute();
-    return $view->result;
-  }
-  else {
-    return array();
-  }
-}
+*function views_get_view_result($name, $display_id = NULL) {
+*  $args = func_get_args();
+*  array_shift($args); // remove $name
+*  if (count($args)) {
+*    array_shift($args); // remove $display_id
+*  }
+*
+*  $view = views_get_view($name);
+*  if (is_object($view)) {
+*    if (is_array($args)) {
+*      $view->set_arguments($args);
+*    }
+*    if (is_string($display_id)) {
+*      $view->set_display($display_id);
+*    }
+*    else {
+*      $view->init_display();
+*    }
+*    $view->pre_execute();
+*    $view->execute();
+*    return $view->result;
+*  }
+*  else {
+*    return array();
+*  }
+*}
 */
