@@ -41,14 +41,34 @@ function scrollspy_menu() {
 function scrollspy_add_block_form() {
 	$form['scrollspy_blocks'] = array(
 		'#type' => 'checkboxes',
-		'#options' => drupal_map_assoc(array(t('Test 1'), t('Test 2'))),
+		'#options' => drupal_map_assoc(array(
+			t('Test 1'), 
+			t('Test 2')
+		)),
 		'#title' => t('Select Views to Scrollspy.'),
 		'#description' => t('The Scrollspy effect from Bootstrap will be applied to each selected View.'),
+	);
+
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => t('Save'),
 	);
 
 	return $form;
 }
 
+/**
+ * Submit function for scrollspy add block form
+ * API: Look it up in Form API
+ */
+function scrollspy_add_block_form_submit($form, $form_state) {
+	
+	$scrollspy_blocks = $form_state['values']['scrollspy_blocks']
+	
+	//if (isset(['scrollspy_blocks[Test 1]'])) {
+	//	$name = 'test';
+	//}
+}
 
 
 /**
