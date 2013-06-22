@@ -40,13 +40,14 @@ function scrollspy_menu() {
 
 function scrollspy_add_block_form() {
 	$form['scrollspy_blocks'] = array(
-		'#type' => 'checkboxes',
-		'#options' => drupal_map_assoc(array(
-			t('Test 1'), 
-			t('Test 2')
-		)),
+		'#type' => 'select',
+		'#options' => array(
+			0 => t('View 1'),
+			1 => t('View 2'),
+			2 => t('View 3')
+		),
 		'#title' => t('Select Views to Scrollspy.'),
-		'#description' => t('The Scrollspy effect from Bootstrap will be applied to each selected View.'),
+		'#description' => t('The Scrollspy effect from Bootstrap will be applied to the selected View.'),
 	);
 
 	$form['submit'] = array(
@@ -63,11 +64,8 @@ function scrollspy_add_block_form() {
  */
 function scrollspy_add_block_form_submit($form, $form_state) {
 	
-	$scrollspy_blocks = $form_state['values']['scrollspy_blocks']
+	$scrollspy_blocks = $form_state['values']['scrollspy_blocks'];
 	
-	//if (isset(['scrollspy_blocks[Test 1]'])) {
-	//	$name = 'test';
-	//}
 }
 
 
