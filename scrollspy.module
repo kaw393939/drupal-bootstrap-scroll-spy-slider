@@ -37,17 +37,18 @@ function scrollspy_menu() {
  * Builds form for adding scrollspy blocks
  * API: https://api.drupal.org/api/drupal/developer%21topics%21forms_api_reference.html/7
  */
-
 function scrollspy_add_block_form() {
 	$form['scrollspy_blocks'] = array(
 		'#type' => 'select',
-		'#options' => array(
+		'#options' => drupal_map_assoc(array(
 			0 => t('View 1'),
 			1 => t('View 2'),
 			2 => t('View 3')
-		),
+		)),
 		'#title' => t('Select Views to Scrollspy.'),
 		'#description' => t('The Scrollspy effect from Bootstrap will be applied to the selected View.'),
+		'#default_value' => 0,
+		'#required' => TRUE,
 	);
 
 	$form['submit'] = array(
@@ -58,14 +59,33 @@ function scrollspy_add_block_form() {
 	return $form;
 }
 
+
 /**
  * Submit function for scrollspy add block form
- * API: Look it up in Form API
+ * API: Form API
  */
 function scrollspy_add_block_form_submit($form, $form_state) {
+	$scrollspy_block = $form_state['values']['scrollspy_blocks'];
+	//scrollspy_save_block($scrollspy_block);
+	drupal_set_message(t('Block has been saved on selected Views page.'));
 	
-	$scrollspy_blocks = $form_state['values']['scrollspy_blocks'];
+	// This piece below gets all views and organizes them by machine name HUGELY IMPORTANT
+	$views = views_get_all_views();
+	foreach ($views as $machine_name => $view) {
+		unset($view->display, $view->localization_plugin);
+		$views[$machine_name] = $view;
+	}
 	
+	dpm($views);
+}
+
+/**
+ * Stores selected view
+ * @param $scrollspy_block
+ *		contains the value of select list
+ */
+function scrollspy_save_block($scrollspy_block) {
+	variable_set('scrollspy_blocks', $scrollspy_block);
 }
 
 
