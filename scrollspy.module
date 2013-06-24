@@ -38,12 +38,21 @@ function scrollspy_menu() {
  * API: https://api.drupal.org/api/drupal/developer%21topics%21forms_api_reference.html/7
  */
 function scrollspy_add_block_form() {
+	
+	// This piece below gets all views and organizes them by machine name HUGELY IMPORTANT
+	$views = views_get_all_views();
+	foreach ($views as $machine_name => $view) {
+		unset($view->display, $view->localization_plugin);
+		$views[$machine_name] = $view;
+	}
+	
+	dpm($views);
+	
+	// This sets up the form
 	$form['scrollspy_blocks'] = array(
 		'#type' => 'select',
 		'#options' => drupal_map_assoc(array(
-			0 => t('View 1'),
-			1 => t('View 2'),
-			2 => t('View 3')
+			1 => "test",
 		)),
 		'#title' => t('Select Views to Scrollspy.'),
 		'#description' => t('The Scrollspy effect from Bootstrap will be applied to the selected View.'),
@@ -69,14 +78,7 @@ function scrollspy_add_block_form_submit($form, $form_state) {
 	//scrollspy_save_block($scrollspy_block);
 	drupal_set_message(t('Block has been saved on selected Views page.'));
 	
-	// This piece below gets all views and organizes them by machine name HUGELY IMPORTANT
-	$views = views_get_all_views();
-	foreach ($views as $machine_name => $view) {
-		unset($view->display, $view->localization_plugin);
-		$views[$machine_name] = $view;
-	}
 	
-	dpm($views);
 }
 
 /**
@@ -85,7 +87,7 @@ function scrollspy_add_block_form_submit($form, $form_state) {
  *		contains the value of select list
  */
 function scrollspy_save_block($scrollspy_block) {
-	variable_set('scrollspy_blocks', $scrollspy_block);
+	variable_set('scrollspy_blocks', $scrollspy_block);  // API: https://api.drupal.org/api/drupal/includes%21bootstrap.inc/function/variable_set/7
 }
 
 
