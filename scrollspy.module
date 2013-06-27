@@ -19,10 +19,10 @@ function scrollspy_block_info() {
  * API: https://api.drupal.org/api/drupal/modules!system!system.api.php/function/hook_menu/7
  */
 function scrollspy_menu() {
-	$items['admin/structure/block/add-scrollspy-block'] = array( //admin/structure/block/add-scrollspy-block <-- That's the path we really want
+	$items['admin/structure/block/add-scrollspy-block'] = array(
 		'title' => 'Add Scrollspy Block',
 		'description' => 'Attach Scrollspy to a view',
-		'page callback' => 'drupal_get_form', //To make a form -- API: https://api.drupal.org/api/drupal/includes!form.inc/function/drupal_get_form/7
+		'page callback' => 'drupal_get_form', //drupal_get_form used to make a form -- API: https://api.drupal.org/api/drupal/includes!form.inc/function/drupal_get_form/7
         'page arguments' => array('scrollspy_add_block_form'),
 		'access callback' => 'user_access',
 		'access arguments' => array('administer blocks'),
@@ -40,20 +40,20 @@ function scrollspy_menu() {
 function scrollspy_add_block_form() {
 	
 	// This piece below gets all views and organizes them by machine name HUGELY IMPORTANT
+	// machine name is the key
 	$views = views_get_all_views();
 	foreach ($views as $machine_name => $view) {
-		unset($view->display, $view->localization_plugin);
+	//	unset($view->display, $view->localization_plugin);
 		$views[$machine_name] = $view;
 	}
+	
 	
 	dpm($views);
 	
 	// This sets up the form
 	$form['scrollspy_blocks'] = array(
 		'#type' => 'select',
-		'#options' => drupal_map_assoc(array(
-			1 => "test",
-		)),
+		'#options' => array_keys($views),
 		'#title' => t('Select Views to Scrollspy.'),
 		'#description' => t('The Scrollspy effect from Bootstrap will be applied to the selected View.'),
 		'#default_value' => 0,
