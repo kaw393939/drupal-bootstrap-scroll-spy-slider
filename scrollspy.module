@@ -75,7 +75,7 @@ function scrollspy_add_block_form() {
  */
 function scrollspy_add_block_form_submit($form, $form_state) {
 	$scrollspy_block = $form_state['values']['scrollspy_blocks'];
-	//scrollspy_save_block($scrollspy_block);
+	scrollspy_save_block($scrollspy_block);
 	drupal_set_message(t('Block has been saved on selected Views page.'));
 	
 	
@@ -90,6 +90,80 @@ function scrollspy_save_block($scrollspy_block) {
 	variable_set('scrollspy_blocks', $scrollspy_block);  // API: https://api.drupal.org/api/drupal/includes%21bootstrap.inc/function/variable_set/7
 }
 
+/**
+ * Please note: Shit from here down is temporary for testing the bootstrap-scrollspy.js file
+ */
+ 
+/**
+ * Implements hook_block_configure().
+ */
+function scrollspy_block_configure($delta='') {
+  $form = array();
+ 
+  switch($delta) {
+    case 'scrollspy' :
+      // Text field form element
+      $form['text_body'] = array(
+        '#type' => 'text_format',
+        '#title' => t('Enter your text here'),
+        '#default_value' => variable_get('text_variable', ''),
+      );
+ 
+      break;
+  }
+  return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function scrollspy_block_save($delta = '', $edit = array()) {
+  switch($delta) {
+    case 'scrollspy' :
+      // Saving the text      
+      variable_set('text_variable', $edit['text_body']['value']);
+  }
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function scrollspy_block_view($delta='') {
+  $block = array();
+ 
+  switch($delta) {
+    case 'scrollspy' :
+      $block['content'] = scrollspy_view();
+      break;
+  }
+ 
+  return $block;
+}
+ 
+/**
+ * Custom function to assemble renderable array for block content.
+ * Returns a renderable array with the block content.
+ * @return
+ *   returns a renderable array of block content.
+ */
+function scrollspy_view() {
+  $block = array();
+ 
+  // Capture WYSIWYG text from the variable
+  $text = variable_get('text_variable', '');
+ 
+  // Block output in HTML with div wrapper
+  $block = array(
+    'message' => array(
+      '#prefix' => '<div class="class_name">',
+      '#type' => 'markup',
+      '#markup' => $text,
+      '#suffix' => '</div>',
+    ),
+  );
+ 
+  return $block;
+}
 
 /**
 * Get the result of a view.
