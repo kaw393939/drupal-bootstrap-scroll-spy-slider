@@ -11,4 +11,4 @@ on that Views page with the scrollspy effect attached to that block.
 You can add a new Scrollspy block at admin>structure>blocks>+ add scrollspy blo-
 ck
 
-Just testing...
+
